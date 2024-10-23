@@ -7,12 +7,16 @@ import org.springframework.http.HttpStatus;
 import dev.users.UserService;
 import dev.users.UserProfile;
 import dev.auth.LoginRequest;
+import dev.auth.jwt.JwtUtil;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
     private final UserService userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Autowired
     public AuthController(UserService userService) {
@@ -23,7 +27,8 @@ public class AuthController {
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         boolean isAuthenticated = userService.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
         if (isAuthenticated) {
-            return ResponseEntity.ok("Login successful!");
+            String token = jwtUtil.generateToken(loginRequest.getEmail());
+            return ResponseEntity.ok(token);
         } else {
             return ResponseEntity.status(401).body("Invalid email or password");
         }

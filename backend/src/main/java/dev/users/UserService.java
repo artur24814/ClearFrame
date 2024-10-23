@@ -20,6 +20,8 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public UserProfile getUserByEmail(String email) {return userRepository.findByEmail(email); }
+
     public UserProfile createUser(String firstName, String secondName, String email, String password, String permissions) {
         UserProfile user = new UserProfile(null, firstName, secondName, email, password, permissions); // Hasło zostanie haszowane w konstruktorze
         return userRepository.save(user);
