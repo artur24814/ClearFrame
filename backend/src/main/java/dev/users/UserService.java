@@ -20,11 +20,22 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public UserProfile createUser(UserProfile user) {
+    public UserProfile getUserByEmail(String email) {return userRepository.findByEmail(email); }
+
+    public UserProfile createUser(String firstName, String secondName, String email, String password, String permissions) {
+        UserProfile user = new UserProfile(null, firstName, secondName, email, password, permissions); // Hasło zostanie haszowane w konstruktorze
         return userRepository.save(user);
     }
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public boolean authenticate(String email, String password) {
+        UserProfile user = userRepository.findByEmail(email);
+        if (user == null) {
+            return false;
+        }
+        return user.checkPassword(password);
     }
 }

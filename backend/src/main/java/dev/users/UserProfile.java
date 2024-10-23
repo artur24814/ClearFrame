@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 @Entity
 public class UserProfile {
     @Id
@@ -16,16 +18,16 @@ public class UserProfile {
     private String password;
     private String permissions;
 
-    // Default constructor
+    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     public UserProfile() {}
 
-    // Parameterized constructor
     public UserProfile(Long id, String firstName, String secondName, String email, String password, String permissions) {
         this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
         this.email = email;
-        this.password = password;
+        this.password = passwordEncoder.encode(password);
         this.permissions = permissions;
     }
 
@@ -52,5 +54,9 @@ public class UserProfile {
 
     public String getPermissions() {
         return permissions;
+    }
+
+    public boolean checkPassword(String rawPassword) {
+        return passwordEncoder.matches(rawPassword, this.password);
     }
 }
