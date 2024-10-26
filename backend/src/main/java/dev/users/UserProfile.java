@@ -1,4 +1,4 @@
-package dev.users;
+package src.main.java.dev.users;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,4 +1,4 @@
-package dev.users;
+package src.main.java.dev.users;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

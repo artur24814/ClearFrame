@@ -1,6 +1,6 @@
-package dev.auth;
+package src.main.java.dev.auth;
 
-import dev.auth.jwt.JwtRequestFilter;
+import src.main.java.dev.auth.jwt.JwtRequestFilter;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.beans.factory.annotation.Autowired;

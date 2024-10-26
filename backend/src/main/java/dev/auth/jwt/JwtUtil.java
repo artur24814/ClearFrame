@@ -1,15 +1,15 @@
-package dev.auth.jwt;
+package src.main.java.dev.auth.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.SignatureAlgorithm;
 import javax.crypto.SecretKey;
 
 import org.springframework.stereotype.Component;
 
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class JwtUtil {
             .setSubject(subject)
             .setIssuedAt(new Date(getTokenStartData()))
             .setExpiration(new Date(getTokenExpiredData()))
-            .signWith(SECRET_KEY)
+            .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
             .compact();
     }
 
