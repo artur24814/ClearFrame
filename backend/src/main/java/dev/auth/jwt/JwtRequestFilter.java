@@ -1,6 +1,5 @@
-package dev.auth.jwt;
+package src.main.java.dev.auth.jwt;
 
-import dev.auth.jwt.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,7 +1,7 @@
-package dev.auth.jwt;
+package src.main.java.dev.auth.jwt;
 
-import dev.users.UserProfile;
-import dev.users.UserRepository;
+import src.main.java.dev.users.UserProfile;
+import src.main.java.dev.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found with email: " + email);
         }
+
         return org.springframework.security.core.userdetails.User
             .withUsername(user.getEmail())
             .password(user.getPassword())

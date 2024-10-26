@@ -1,4 +1,4 @@
-package dev.auth;
+package src.main.java.dev.auth;
 
 public class LoginRequest {
     private String email;

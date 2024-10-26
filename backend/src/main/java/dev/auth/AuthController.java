@@ -1,13 +1,12 @@
-package dev.auth;
+package src.main.java.dev.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
-import dev.users.UserService;
-import dev.users.UserProfile;
-import dev.auth.LoginRequest;
-import dev.auth.jwt.JwtUtil;
+import src.main.java.dev.users.UserService;
+import src.main.java.dev.users.UserProfile;
+import src.main.java.dev.auth.jwt.JwtUtil;
 
 @RestController
 @RequestMapping("/api/auth")

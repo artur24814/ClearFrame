@@ -1,9 +1,10 @@
-package dev;
+package src.test.java;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import src.main.java.dev.App;
 
-@SpringBootTest
+@SpringBootTest(classes = App.class)
 class BackendApplicationTests {
 
 	@Test
