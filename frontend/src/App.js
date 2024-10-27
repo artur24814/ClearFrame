@@ -1,28 +1,31 @@
 
 import './App.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React, { useState } from 'react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Home from './pages/home/home.js'
+import Register from './pages/register/register.js'
+import { Login } from './pages/login/login.js'
+import Navbar from './components/navbar.js'
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient()
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+  const handleLogout = () => setIsAuthenticated(false)
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="App">
-        <header className="App-header">
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    </QueryClientProvider>
+    <Router>
+      <QueryClientProvider client={queryClient}>
+        <Navbar isAuthenticated={isAuthenticated} onLogout={handleLogout}/>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
+        </Routes>
+      </QueryClientProvider>
+    </Router>
   );
 }
 
