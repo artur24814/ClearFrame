@@ -1,25 +1,31 @@
-import React from 'react';
-import { useForm } from "react-hook-form";
+import React from 'react'
+import { useForm } from "react-hook-form"
 import * as yup from 'yup';
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Form } from "react-bootstrap";
+import { yupResolver } from "@hookform/resolvers/yup"
+import { Button, Form } from "react-bootstrap"
+import { useNavigate } from 'react-router-dom'
 import axios from '../../../conf/axiosConf.js'
+import { useAuth } from '../../../context/autContext.js'
 
 const schema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Required'),
   password: yup.string().min(6, 'Password should be at least 6 characters long').required('Required'),
 })
 
-export const LoginForm = ({ onLogin }) => {
+export const LoginForm = ({ redirectPath }) => {
+  const navigate = useNavigate()
+  const { login } = useAuth()
+
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
-  });
+  })
 
   const onSubmit = async (data) => {
     try {
       const response = await axios.post('/api/auth/login', data)
       console.log(response.data)
-      onLogin()
+      login(response.data)
+      navigate(redirectPath || '/')
     } catch (error) {
       console.error("Error during login!", error);
     }
