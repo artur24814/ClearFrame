@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../context/autContext'
 import { useNavigate } from 'react-router-dom'
 import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap'
+import '../styles/navbar.css'
 
 
 export default function NavbarComponent (){
@@ -14,9 +15,9 @@ export default function NavbarComponent (){
     navigate('/')
   }
   return (
-    <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
-      <Container className="ms-1 me-1">
-        <Nav.Link as={Link} to="/">Home</Nav.Link>
+    <Navbar collapseOnSelect expand="lg" className="navbar-custom">
+      <Container>
+        <Navbar.Brand as={Link} to="/">clearFrame</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
@@ -45,19 +46,5 @@ export default function NavbarComponent (){
         </Navbar.Collapse>
       </Container>
     </Navbar>
-    // <Navbar bg="dark" variant="dark" expand="lg" className="bg-body-tertiary justify-content-between">
-    //   <Container>
-    //     <Navbar.Brand href="#home">clearFrame</Navbar.Brand>
-    //       <Nav>
-    //         <Nav.Link><Link to="/">Home</Link>
-    //           {isAuthenticated ? (
-    //             <button onClick={handleLogout}>Logout</button>
-    //           ) : (
-    //             <Link to="/register">Register</Link>
-    //           )}
-    //         </Nav.Link>
-    //       </Nav>
-    //   </Container>
-    // </Navbar>
   )
 }
