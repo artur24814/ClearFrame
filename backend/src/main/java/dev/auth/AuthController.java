@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import src.main.java.dev.users.UserService;
 import src.main.java.dev.users.UserProfile;
 import src.main.java.dev.auth.jwt.JwtUtil;
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -23,13 +25,18 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest) {
         boolean isAuthenticated = userService.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
         if (isAuthenticated) {
-            String token = jwtUtil.generateToken(loginRequest.getEmail());
-            return ResponseEntity.ok(token);
+            String email = loginRequest.getEmail();
+            String token = jwtUtil.generateToken(email);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("user", email);
+            response.put("token", token);
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(401).body("Invalid email or password");
+            return ResponseEntity.status(401).build();
         }
     }
 
