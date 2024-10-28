@@ -1,29 +1,17 @@
-
-import './App.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-const queryClient = new QueryClient();
+import React from 'react'
+import NavbarComponent from './components/navbar.js'
+import Footer from './components/footer.js'
+import Providers from './context/globalProviders.js'
+import AppRoutes from './appRoutes.js'
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="App">
-        <header className="App-header">
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    </QueryClientProvider>
-  );
+    <Providers>
+      <NavbarComponent />
+        <AppRoutes />
+      <Footer />
+    </Providers>
+  )
 }
 
-export default App;
+export default App

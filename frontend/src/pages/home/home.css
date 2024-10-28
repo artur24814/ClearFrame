@@ -1,0 +1,56 @@
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+  }
+  
+.hero-button {
+    background-color: #ff5e57;
+    border: none;
+    transition: background-color 0.3s;
+}
+  
+.hero-button:hover {
+    background-color: #ff6b6b;
+}
+  
+.hero-image {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+  
+/* Feature Cards */
+.feature-card {
+    border-radius: 15px;
+    transition: transform 0.3s;
+}
+  
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+  
+/* Examples Section */
+.example-image {
+    transition: transform 0.3s;
+}
+  
+.example-image:hover {
+    transform: scale(1.05);
+}
+  
+/* Testimonials */
+.testimonial-card {
+    border-radius: 15px;
+    background-color: #f7f7f7;
+}
+  
+  /* Download Section */
+.download-section {
+    background: linear-gradient(135deg, #43cea2, #185a9d);
+    color: #f1f1f1;
+}
+  
+.footer-section {
+    background-color: #1a1a1d;
+    color: #f1f1f1;
+}

@@ -15,4 +15,4 @@ const instance = axios.create({
   baseURL: `${apiUrl}`,
 });
 
-export default instance;
+export default instance
