@@ -59,7 +59,7 @@ export const LoginForm = ({ redirectPath }) => {
         </Form.Control.Feedback>
       </Form.Group>
 
-      <Button variant="primary" type="submit">
+      <Button variant="primary" type="submit" className="w-100">
         Login
       </Button>
     </Form>

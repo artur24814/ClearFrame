@@ -46,7 +46,7 @@ export const RegisterForm = ({ onLogin }) => {
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Row className="g-2 mb-4">
         <Col md>
-          <FloatingLabel controlId="floatingInputGrid" label={errors.firstName ? errors.firstName.message : 'First Name'}>
+          <FloatingLabel label={errors.firstName ? errors.firstName.message : 'First Name'}>
             <Form.Control
               type="text"
               placeholder="First name"
@@ -56,7 +56,7 @@ export const RegisterForm = ({ onLogin }) => {
           </FloatingLabel>
         </Col>
         <Col md>
-          <FloatingLabel controlId="floatingInputGrid" label={errors.secondName ? errors.secondName.message : "Second Name"}>
+          <FloatingLabel label={errors.secondName ? errors.secondName.message : "Second Name"}>
             <Form.Control
               type="text"
               placeholder="Second name"
@@ -68,7 +68,7 @@ export const RegisterForm = ({ onLogin }) => {
       </Row>
       <Row className="g-2 mb-4">
         <Col md>
-          <FloatingLabel controlId="floatingInputGrid" label={errors.email ? errors.email.message : "Email"}>
+          <FloatingLabel label={errors.email ? errors.email.message : "Email"}>
             <Form.Control
               type="email"
               placeholder="name@example.com"
@@ -80,7 +80,7 @@ export const RegisterForm = ({ onLogin }) => {
       </Row>
       <Row className="g-2 mb-4">
         <Col md>
-          <FloatingLabel controlId="floatingInputGrid" label={errors.password ? errors.password.message : "Password"}>
+          <FloatingLabel label={errors.password ? errors.password.message : "Password"}>
             <Form.Control
               type="password"
               placeholder="Password"
