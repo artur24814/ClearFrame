@@ -8,7 +8,7 @@ import '../styles/navbar.css'
 
 export default function NavbarComponent (){
   const navigate = useNavigate()
-  const { isAuthenticated, logout } = useAuth()
+  const { isAuthenticated, logout, user } = useAuth()
 
   const handleLogout = () => {
     logout()
@@ -21,7 +21,7 @@ export default function NavbarComponent (){
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#features">Features</Nav.Link>
+            <Nav.Link as={Link} to='/user/image-processing'>Features</Nav.Link>
             <NavDropdown title="Dropdown" id="collapsible-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">
@@ -30,9 +30,14 @@ export default function NavbarComponent (){
             </NavDropdown>
           </Nav>
           {isAuthenticated ? (
-            <Nav.Link as={Link} to={isAuthenticated ? "/" : "/register"}>
-              <button onClick={handleLogout}>Logout</button>
-            </Nav.Link>
+            <Nav>
+              <Nav.Link>
+                {user}
+              </Nav.Link>
+              <Nav.Link as={Link} to="/">
+                <button onClick={handleLogout}>Logout</button>
+              </Nav.Link>
+            </Nav>
           ) : (
             <Nav>
               <Nav.Link as={Link} to="/login">

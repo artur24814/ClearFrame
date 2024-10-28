@@ -1,26 +1,28 @@
 import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/autContext.js'
-import LoginPage from '../../pages/login/login.js'
+import Login from '../../pages/login/login.js'
 
-export const WithAuth = (Component) => {
+const withAuth = (WrappedComponent) => {
   return (props) => {
-    const {isAuthenticated} = useAuth()
+    const { isAuthenticated } = useAuth()
     const location = useLocation()
 
     useEffect(() => {
       if (isAuthenticated) {
-        // Save user data in localStorage if authenticated
-        // localStorage.setItem('user', JSON.stringify(user))
-
         console.log('User logged in')
+        // Here you can save user data to localStorage if you want
+        // localStorage.setItem('user', JSON.stringify(user)); // Uncomment and use as needed
       }
     }, [isAuthenticated])
 
     if (!isAuthenticated) {
-      return <LoginPage redirectPath={location.pathname} />;
+      return <Login redirectPath={location.pathname} />
     }
 
-    return <Component {...props} />
-  }
-}
+    // If authenticated, render the wrapped component
+    return <WrappedComponent {...props} />;
+  };
+};
+
+export default withAuth
