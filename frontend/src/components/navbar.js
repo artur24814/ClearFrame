@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/autContext'
 import { useNavigate } from 'react-router-dom'
-import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap'
+import { Container, Navbar, Nav, NavDropdown, Button } from 'react-bootstrap'
 import '../styles/navbar.css'
 
 
@@ -15,7 +15,7 @@ export default function NavbarComponent (){
     navigate('/')
   }
   return (
-    <Navbar collapseOnSelect expand="lg" className="navbar-custom">
+    <Navbar bg="dark" variant="dark" expand="lg" className="navbar-custom">
       <Container>
         <Navbar.Brand as={Link} to="/">clearFrame</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -31,20 +31,26 @@ export default function NavbarComponent (){
           </Nav>
           {isAuthenticated ? (
             <Nav>
-              <Nav.Link>
+              <Nav.Link as={Link} to="/" className='mt-1'>
                 {user}
               </Nav.Link>
               <Nav.Link as={Link} to="/">
-                <button onClick={handleLogout}>Logout</button>
+                <Button variant="outline-light" onClick={handleLogout} className="me-2">
+                  Logout
+                </Button>
               </Nav.Link>
             </Nav>
           ) : (
             <Nav>
               <Nav.Link as={Link} to="/login">
-                Login
+                <Button variant="outline-light" className="me-2">
+                  Login
+                </Button>
               </Nav.Link>
               <Nav.Link as={Link} to="/register">
-                Register
+                <Button variant="outline-light" className="me-2">
+                  Register
+                </Button>
               </Nav.Link>
             </Nav>
           )}

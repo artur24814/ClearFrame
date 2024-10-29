@@ -4,14 +4,13 @@ const AuthContext = createContext()
 
 export const AutProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'))
-  const [user, setUser] = useState(null)
-  const [token, setToken] = useState(null)
+  const [user, setUser] = useState(localStorage.getItem('user'))
+  const [token, setToken] = useState(localStorage.getItem('token'))
 
   const login = (response) => {
     setIsAuthenticated(true)
     setUser(response.user)
     setToken(response.token)
-
     localStorage.setItem('token', response.token)
     localStorage.setItem('user', response.user)
   }
