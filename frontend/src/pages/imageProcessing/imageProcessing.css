@@ -1,0 +1,25 @@
+body, html, #root {
+    height: 100%;
+    margin: 0;
+}
+
+.upload-area {
+    border: 2px dashed #cccccc;
+    padding: 2rem;
+    text-align: center;
+    background-color: #fafafa;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.upload-area:hover {
+    background-color: #f0f0f0;
+}
+
+.image-display img {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
