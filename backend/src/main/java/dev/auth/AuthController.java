@@ -41,8 +41,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserProfile createUser(@RequestBody UserProfile user) {
-        return userService.createUser(user.getFirstName(), user.getSecondName(), user.getEmail(), user.getPassword(), user.getPermissions());
+    public ResponseEntity<String> createUser(@RequestBody UserProfile user) {
+        try {
+            userService.createUser(
+                user.getFirstName(), user.getSecondName(), user.getEmail(), user.getPassword(), user.getPermissions()
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

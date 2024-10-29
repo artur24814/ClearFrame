@@ -23,7 +23,10 @@ public class UserService {
     public UserProfile getUserByEmail(String email) {return userRepository.findByEmail(email); }
 
     public UserProfile createUser(String firstName, String secondName, String email, String password, String permissions) {
-        UserProfile user = new UserProfile(null, firstName, secondName, email, password, permissions); // Hasło zostanie haszowane w konstruktorze
+        UserProfile user = new UserProfile(null, firstName, secondName, email, password, permissions);
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email is already in use");
+        }
         return userRepository.save(user);
     }
 
