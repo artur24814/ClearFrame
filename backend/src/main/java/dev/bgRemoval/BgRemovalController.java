@@ -1,5 +1,6 @@
 package src.main.java.dev.bgRemoval;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,11 +19,16 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 
+import src.main.java.dev.bgRemoval.BgRemoval;
+
 @RestController
 @RequestMapping("/api/bg-remove")
 public class BgRemovalController {
 
     private static final Logger logger = LoggerFactory.getLogger(src.main.java.dev.bgRemoval.BgRemovalController.class);
+
+    private final BgRemoval bgRemoval = new BgRemoval();
+
 
     @PostMapping("/process")
     public ResponseEntity<byte[]> process(@RequestParam("file") MultipartFile file) throws IOException {
@@ -30,16 +36,8 @@ public class BgRemovalController {
             logger.warn("Plik jest pusty!");
             return ResponseEntity.badRequest().build();
         }
-        BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
-        if (inputImage == null) {
-            logger.warn("Nie udało się wczytać obrazu z pliku!");
-            return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).build();
-        }
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(inputImage, "png", baos);
-        byte[] imageBytes = baos.toByteArray();
+        byte[] imageBytes = bgRemoval.processedImage(file);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);

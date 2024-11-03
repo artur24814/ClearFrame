@@ -27,7 +27,7 @@ public class BgRemovalControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    private void shouldReturnImage_whenImageIsUploaded() throws Exception {
+    public void shouldReturnImage_whenImageIsUploaded() throws Exception {
         BufferedImage bufferedImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -46,5 +46,19 @@ public class BgRemovalControllerTest {
             .andExpect(status().isOk())
             .andExpect(MockMvcResultMatchers.header().string("Content-Type", "image/png"))
             .andExpect(content().bytes(imageBytes));
+    }
+
+    @Test
+    public void shouldReturnError_whenImageIsNull() throws Exception {
+        MockMultipartFile emptyFile = new MockMultipartFile(
+            "file",
+            "empty.png",
+            MediaType.IMAGE_PNG_VALUE,
+            new byte[0]
+        );
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/bg-remove/process")
+                .file(emptyFile))
+            .andExpect(status().isBadRequest());
     }
 }
