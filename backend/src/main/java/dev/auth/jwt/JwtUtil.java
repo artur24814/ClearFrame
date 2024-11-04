@@ -3,9 +3,7 @@ package src.main.java.dev.auth.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.SignatureAlgorithm;
 import javax.crypto.SecretKey;
 
 import org.springframework.stereotype.Component;
@@ -29,7 +27,7 @@ public class JwtUtil {
             .setSubject(subject)
             .setIssuedAt(new Date(getTokenStartData()))
             .setExpiration(new Date(getTokenExpiredData()))
-            .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+            .signWith(SECRET_KEY)
             .compact();
     }
 
@@ -52,8 +50,9 @@ public class JwtUtil {
     }
 
     public Claims extractAllClaims(String token) {
-        return Jwts.parser()
+        return Jwts.parserBuilder()
             .setSigningKey(SECRET_KEY)
+            .build()
             .parseClaimsJws(token)
             .getBody();
     }
