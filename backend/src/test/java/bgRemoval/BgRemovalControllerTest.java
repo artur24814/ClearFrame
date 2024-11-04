@@ -12,12 +12,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import src.main.java.dev.App;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import testConf.factories.ImageFactory;
+
+import java.awt.image.BufferedImage;
 
 @SpringBootTest(classes = App.class)
 @AutoConfigureMockMvc
@@ -27,12 +27,8 @@ public class BgRemovalControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void shouldReturnImage_whenImageIsUploaded() throws Exception {
-        BufferedImage bufferedImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        ImageIO.write(bufferedImage, "png", baos);
-        byte[] imageBytes = baos.toByteArray();
+    public void shouldReturnImage_whenImagePngIsUploaded() throws Exception {
+        byte[] imageBytes = ImageFactory.getFakeImageBytes(100, 100, "png", BufferedImage.TYPE_INT_RGB);
 
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file",

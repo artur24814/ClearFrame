@@ -23,6 +23,7 @@ public class BgRemoval {
         return matToByteArray(processedImage);
     }
 
+    // https://opencv-java-tutorials.readthedocs.io/en/latest/07-image-segmentation.html
     public Mat removeBackground(MultipartFile file) throws IOException {
         Mat image = multipartFileToMat(file);
 
@@ -40,6 +41,15 @@ public class BgRemoval {
 
         image.copyTo(foreground, foregroundMask);
         return foreground;
+    }
+
+    private Mat multipartFileToMat(MultipartFile file) throws IOException {
+        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
+        if (bufferedImage == null) {
+            logger.error("The image cannot be loaded, the file format is probably unsupported.");
+            throw new IOException("Unsupported file format or corrupt file.");
+        }
+        return bufferedImageToMat(bufferedImage);
     }
 
     private Mat getMaskForGrabCut(Mat image) {
@@ -64,11 +74,6 @@ public class BgRemoval {
             }
         }
         return foregroundMask;
-    }
-
-    private Mat multipartFileToMat(MultipartFile file) throws IOException {
-        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
-        return bufferedImageToMat(bufferedImage);
     }
 
     private Mat bufferedImageToMat(BufferedImage image) {
