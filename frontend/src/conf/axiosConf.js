@@ -15,4 +15,16 @@ const instance = axios.create({
   baseURL: `${apiUrl}`,
 });
 
+//this function adds bearer token to every request
+instance.interceptors.request.use(
+  (config) => {
+    const accessToken = localStorage.getItem('token');
+    if (accessToken) {
+      config.headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 export default instance

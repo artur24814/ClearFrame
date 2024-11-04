@@ -1,14 +1,46 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/autContext'
 import { useNavigate } from 'react-router-dom'
 import { Container, Navbar, Nav, NavDropdown, Button } from 'react-bootstrap'
 import '../styles/navbar.css'
+import axios from '../../../conf/axiosConf.js'
 
 
 export default function NavbarComponent (){
   const navigate = useNavigate()
-  const { isAuthenticated, logout, user } = useAuth()
+  const { isAuthenticated, login, logout, user } = useAuth()
+  
+  //implement refresh token logic, logout if request is unauthorised
+  useEffect(() => {
+    const refreshTokenFunc = async () => {
+        if (isAuthenticated) {
+          const expiretime = localStorage.getItem('expiretime') 
+          const currentTime = Date.now();
+
+          //get new token refreshToken
+          if (currentTime >= expiretime) {
+              console.log(':: TOKEN EXPIRED');
+              // ?? need to create a api to refresh token
+              const token = localStorage.getItem('token')
+              const response = axios.post('/api/auth/refresToken',{ token})
+              //handle authorized requests
+              if (response.status !== "401") {
+                  login(response.data)
+              } else{
+                //handle unauthorised requests
+                handleLogout()
+              }
+
+          }
+      }
+        
+    };
+
+    const intervalId = setInterval(refreshTokenFunc, 3000000); // Check every 5 mintue
+
+    return () => clearInterval(intervalId); // Cleanup on unmount
+}, [isAuthenticated]);
 
   const handleLogout = () => {
     logout()

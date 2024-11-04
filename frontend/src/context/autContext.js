@@ -13,6 +13,8 @@ export const AutProvider = ({ children }) => {
     setToken(response.token)
     localStorage.setItem('token', response.token)
     localStorage.setItem('user', response.user)
+    //?? need to send an expiretime value
+    localStorage.setItem('expiretime', response.expiretime)
   }
 
   const logout = () => {
@@ -22,6 +24,8 @@ export const AutProvider = ({ children }) => {
 
     localStorage.removeItem('token')
     localStorage.removeItem('user')
+    
+    localStorage.removeItem('expiretime')
   }
 
   return (
