@@ -15,6 +15,7 @@ This application offers advanced image editing capabilities, specializing in rem
     - `spring-boot-starter-web`
     - `spring-boot-starter-security`
     - `h2database`
+    - `openCv`
     - `jjwt-api`, `jjwt-impl`, and `jjwt-jackson` for JWT handling
 - **Frontend**: React
   - Main Libraries: `axios`, `react-router-dom`, `react-bootstrap`, `react-hook-form`, `yup`
@@ -83,6 +84,23 @@ Creates a new user profile.
 - Response:
     - 201 Created: `"User registered successfully"`
     - 400 Bad Request: Returns an error message if registration fails.
+
+### Background Removal
+Endpoint: `POST /api/bg-remove/process`
+
+Processes an uploaded image by removing its background and returns the modified image in PNG format.
+
+- Request Parameters:
+    `file` (required): An image file in `multipart/form-data` format to be processed.
+- Example Request:
+    ```bash
+    curl -X POST http://localhost:8080/api/bg-remove/process \
+        -H "Content-Type: multipart/form-data" \
+        -F "file=@/path/to/image.png"
+    ```
+- Response:
+    - 200 OK: Returns the processed image with the background removed in image/png format.
+    - 400 Bad Request: Returns if the uploaded file is empty or missing.
 </details>
 
 ## License
