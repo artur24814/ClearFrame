@@ -7,6 +7,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -54,14 +55,20 @@ public class AuthControllerTest {
     @Test
     public void testLogin_SuccessfulAuthentication() throws Exception {
         when(userService.authenticate(userRegular.getEmail(), userRegular.getPassword())).thenReturn(true);
-        when(jwtUtil.generateToken(any(String.class))).thenReturn("mocked.jwt.token");
+        when(jwtUtil.generateToken(any(String.class), eq(1000 * 60 * 15L))).thenReturn("mocked.jwt.token");
+        when(jwtUtil.generateToken(any(String.class), eq(1000 * 60 * 60 * 24 * 30L))).thenReturn("mocked.jwt.refresh.token");
 
         mockMvc.perform(post("/api/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"email\":\"" + userRegular.getEmail() + "\", \"password\":\"" + userRegular.getPassword() + "\"}"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.user").value(userRegular.getEmail()))
-            .andExpect(jsonPath("$.token").isNotEmpty());
+            .andExpect(jsonPath("$.token").isNotEmpty())
+            .andExpect(header().exists("Set-Cookie"))
+            .andExpect(header().string("Set-Cookie", containsString("refreshToken=mocked.jwt.refresh.token")))
+            .andExpect(header().string("Set-Cookie", containsString("HttpOnly")))
+            .andExpect(header().string("Set-Cookie", containsString("Path=/")))
+            .andExpect(header().string("Set-Cookie", containsString("Max-Age=2592000")));
     }
 
     @Test
