@@ -68,4 +68,26 @@ public class AuthController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<Map<String, String>> refresh(@CookieValue(value = "refreshToken", required = false) String refreshToken){
+        String email;
+        Map<String, String>response = new HashMap<>();
+
+        try {
+            email = jwtUtil.extractEmail(refreshToken);
+
+            if (!jwtUtil.validateToken(refreshToken, email)){
+                response.put("error", "Invalid refresh token");
+                throw new Exception();
+            };
+
+            String accessToken = jwtUtil.generateToken(email, ACCESS_TOKEN_EXPIRED_TIME);
+            response.put("token", accessToken);
+
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(401).build();
+        }
+    }
 }
