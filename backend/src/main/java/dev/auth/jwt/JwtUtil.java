@@ -3,9 +3,7 @@ package src.main.java.dev.auth.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.SignatureAlgorithm;
 import javax.crypto.SecretKey;
 
 import org.springframework.stereotype.Component;
@@ -18,28 +16,23 @@ import java.util.Map;
 public class JwtUtil {
     private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    public String generateToken(String email) {
+    public String generateToken(String email, long expiredTime) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, email);
+        return createToken(claims, email, expiredTime);
     }
 
-    public String createToken(Map<String, Object> claims, String subject){
+    public String createToken(Map<String, Object> claims, String subject, long expiredTime){
         return Jwts.builder()
             .setClaims(claims)
             .setSubject(subject)
             .setIssuedAt(new Date(getTokenStartData()))
-            .setExpiration(new Date(getTokenExpiredData()))
-            .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+            .setExpiration(new Date(getTokenStartData() + expiredTime))
+            .signWith(SECRET_KEY)
             .compact();
     }
 
     public long getTokenStartData() {
         return System.currentTimeMillis();
-    }
-
-    public long getTokenExpiredData() {
-        int ten_min = 1000 * 60 * 10;
-        return getTokenStartData() + ten_min;
     }
 
     public boolean validateToken (String token, String email) {
@@ -52,8 +45,9 @@ public class JwtUtil {
     }
 
     public Claims extractAllClaims(String token) {
-        return Jwts.parser()
+        return Jwts.parserBuilder()
             .setSigningKey(SECRET_KEY)
+            .build()
             .parseClaimsJws(token)
             .getBody();
     }

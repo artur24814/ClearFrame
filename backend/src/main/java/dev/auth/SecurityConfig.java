@@ -22,12 +22,10 @@ public class SecurityConfig {
         http
             .csrf().disable()
             .authorizeRequests()
-            .requestMatchers("/api/auth/**").permitAll()  // public
+            .requestMatchers("/api/auth/**", "/api/bg-remove/**").permitAll()  // public
             .anyRequest().authenticated()
             .and()
-            .httpBasic();
-
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
