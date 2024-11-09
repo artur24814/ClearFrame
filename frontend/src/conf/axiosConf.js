@@ -7,24 +7,24 @@ axios.get('/api/data')
     console.log(response.data);
   });
 */
-import axios from 'axios';
+import axios from 'axios'
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = process.env.REACT_APP_API_URL
 
 const instance = axios.create({
   baseURL: `${apiUrl}`,
-});
+  withCredentials: true
+})
 
-//this function adds bearer token to every request
 instance.interceptors.request.use(
   (config) => {
-    const accessToken = localStorage.getItem('token');
+    const accessToken = localStorage.getItem('token')
     if (accessToken) {
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
+      config.headers['Authorization'] = `Bearer ${accessToken}`
     }
-    return config;
+    return config
   },
   (error) => Promise.reject(error)
-);
+)
 
 export default instance
