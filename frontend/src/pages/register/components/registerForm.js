@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row'
 import { Button } from "react-bootstrap"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useMutation } from '@tanstack/react-query'
-import axios from '../../../conf/axiosConf.js'
+import api from '../../../conf/axiosConf.js'
 
 export const RegisterForm = ({ onLogin }) => {
   const schema = yup.object().shape({
@@ -24,7 +24,7 @@ export const RegisterForm = ({ onLogin }) => {
 
   const mutation = useMutation({
     mutationFn: async (data) => {
-      const response = await axios.post('/api/auth/register', {
+      const response = await api.post('/api/auth/register', {
         ...data,
         permissions: 'BASE_USER',
       });

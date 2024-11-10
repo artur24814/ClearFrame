@@ -1,51 +1,56 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/autContext'
 import { useNavigate } from 'react-router-dom'
 import { Container, Navbar, Nav, NavDropdown, Button } from 'react-bootstrap'
 import '../styles/navbar.css'
-import axios from '../../../conf/axiosConf.js'
+import api from '../conf/axiosConf.js'
+import { MAX_TOKEN_LIFE_TIME } from '../conf/tokenConf.js'
+import AutheticationError from '../errors/AuthenticationError.js'
 
 
 export default function NavbarComponent (){
   const navigate = useNavigate()
-  const { isAuthenticated, login, logout, user } = useAuth()
-  
-  //implement refresh token logic, logout if request is unauthorised
-  useEffect(() => {
-    const refreshTokenFunc = async () => {
-        if (isAuthenticated) {
-          const expiretime = localStorage.getItem('expiretime') 
-          const currentTime = Date.now();
+  const { isAuthenticated, logout, user, expiretime } = useAuth()
+  const intervalRef = useRef(null)
 
-          //get new token refreshToken
-          if (currentTime >= expiretime) {
-              console.log(':: TOKEN EXPIRED');
-              // ?? need to create a api to refresh token
-              const token = localStorage.getItem('token')
-              const response = axios.post('/api/auth/refresToken',{ token})
-              //handle authorized requests
-              if (response.status !== "401") {
-                  login(response.data)
-              } else{
-                //handle unauthorised requests
-                handleLogout()
-              }
-
-          }
-      }
-        
-    };
-
-    const intervalId = setInterval(refreshTokenFunc, 3000000); // Check every 5 mintue
-
-    return () => clearInterval(intervalId); // Cleanup on unmount
-}, [isAuthenticated]);
-
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logout()
     navigate('/')
+  }, [logout, navigate])
+
+  const refreshTokenFunc = useCallback( async () => {
+    if (isAuthenticated) {
+
+      if (isTokenExpired(expiretime)) {
+        console.log(':: TOKEN EXPIRED')
+        try {
+          const response = await api.post('/api/auth/refresh',{}, { withCredentials: true })
+          if (response.status === 200 && response.data.token) {
+            console.log('Set new token')
+            localStorage.setItem('token', response.data.token)
+          } else {
+            throw new AutheticationError()
+          }
+        } catch (e) {
+          console.log('Error via refreshing token....', e)
+          handleLogout()
+        }
+      }
+    } 
+  }, [isAuthenticated, expiretime, handleLogout])
+
+  const isTokenExpired = (expiretime) => {
+    const currentTime = Date.now()
+    return currentTime >= expiretime
   }
+
+  useEffect(() => {
+    intervalRef.current = setInterval(refreshTokenFunc, MAX_TOKEN_LIFE_TIME);
+
+    return () => clearInterval(intervalRef.current)
+  }, [refreshTokenFunc])
+
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="navbar-custom">
       <Container>

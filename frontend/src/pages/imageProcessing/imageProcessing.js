@@ -13,7 +13,7 @@ import SidebarForUserProjects from './components/sidebarForUserProjects.js'
 
 const ImageProcessing = () => {
   const [image, setImage] = useState(null)
-  const [projects, setProjects] = useState([
+  const [projects, ] = useState([
     { id: 1, name: 'Project 1' },
     { id: 2, name: 'Project 2' },
   ])
