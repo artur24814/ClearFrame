@@ -1,0 +1,1 @@
+export const MAX_TOKEN_LIFE_TIME = 1000 * 60 * 14

@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from "react-hook-form"
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup"
-import { Button, Form } from "react-bootstrap"
+import { Button, Form, Alert } from "react-bootstrap"
 import { useNavigate } from 'react-router-dom'
-import axios from '../../../conf/axiosConf.js'
+import api from '../../../conf/axiosConf.js'
 import { useAuth } from '../../../context/autContext.js'
 
 const schema = yup.object().shape({
@@ -15,6 +15,7 @@ const schema = yup.object().shape({
 export const LoginForm = ({ redirectPath }) => {
   const navigate = useNavigate()
   const { login } = useAuth()
+  const [ errorLoginMsg, setErrorLoginMsg ] = useState(null) 
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
@@ -22,17 +23,18 @@ export const LoginForm = ({ redirectPath }) => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post('/api/auth/login', data)
-      console.log(response.data)
+      const response = await api.post('/api/auth/login', data)
       login(response.data)
       navigate(redirectPath || '/')
+      setErrorLoginMsg(null)
     } catch (error) {
-      console.error("Error during login!", error);
+      setErrorLoginMsg("Invalid email or password. Please try again.")
     }
   }
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
+      {errorLoginMsg && <Alert variant="danger">{errorLoginMsg}</Alert>}
       <Form.Group className="mb-3" controlId="formEmail">
         <Form.Label>Email</Form.Label>
         <Form.Control 

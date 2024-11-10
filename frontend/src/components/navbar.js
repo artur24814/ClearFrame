@@ -1,44 +1,55 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/autContext'
 import { useNavigate } from 'react-router-dom'
 import { Container, Navbar, Nav, NavDropdown, Button } from 'react-bootstrap'
 import '../styles/navbar.css'
-import axios from '../conf/axiosConf.js'
+import api from '../conf/axiosConf.js'
+import { MAX_TOKEN_LIFE_TIME } from '../conf/tokenConf.js'
+import AutheticationError from '../errors/AuthenticationError.js'
 
 
 export default function NavbarComponent (){
   const navigate = useNavigate()
-  const { isAuthenticated, login, logout, user, expireTokenTime } = useAuth()
-  const maxTokenLifeTime = 1000 * 60 * 14
+  const { isAuthenticated, logout, user, expiretime } = useAuth()
+  const intervalRef = useRef(null)
 
   const handleLogout = useCallback(() => {
     logout()
     navigate('/')
   }, [logout, navigate])
 
-  useEffect(() => {
-    const refreshTokenFunc = async () => {
-      if (isAuthenticated) {     
-        const currentTime = Date.now()
+  const refreshTokenFunc = useCallback( async () => {
+    if (isAuthenticated) {
 
-        if (currentTime >= expireTokenTime) {
-          console.log(':: TOKEN EXPIRED')
-          const response = axios.post('/api/auth/refresh',{}, { withCredentials: true })
-          if (response.status !== "401") {
-            const newExpireTokenTime = currentTime + maxTokenLifeTime
-            login(response.data, newExpireTokenTime)
+      if (isTokenExpired(expiretime)) {
+        console.log(':: TOKEN EXPIRED')
+        try {
+          const response = await api.post('/api/auth/refresh',{}, { withCredentials: true })
+          if (response.status === 200 && response.data.token) {
+            console.log('Set new token')
+            localStorage.setItem('token', response.data.token)
           } else {
-            handleLogout()
+            throw new AutheticationError()
           }
+        } catch (e) {
+          console.log('Error via refreshing token....', e)
+          handleLogout()
         }
-      }  
-    }
+      }
+    } 
+  }, [isAuthenticated, expiretime, handleLogout])
 
-    const intervalId = setInterval(refreshTokenFunc, maxTokenLifeTime)
+  const isTokenExpired = (expiretime) => {
+    const currentTime = Date.now()
+    return currentTime >= expiretime
+  }
 
-    return () => clearInterval(intervalId)
-  }, [isAuthenticated, expireTokenTime, handleLogout, login, maxTokenLifeTime])
+  useEffect(() => {
+    intervalRef.current = setInterval(refreshTokenFunc, MAX_TOKEN_LIFE_TIME);
+
+    return () => clearInterval(intervalRef.current)
+  }, [refreshTokenFunc])
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="navbar-custom">

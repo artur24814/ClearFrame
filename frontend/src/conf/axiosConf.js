@@ -1,15 +1,15 @@
 /* Usage:
 
-import axios from './conf/axiosConfig';
+import api from './conf/axiosConfig';
 
-axios.get('/api/data')
+api.get('/api/data')
   .then(response => {
     console.log(response.data);
   });
 */
 import axios from 'axios'
 
-const apiUrl = process.env.REACT_APP_API_URL
+const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8080'
 
 const instance = axios.create({
   baseURL: `${apiUrl}`,

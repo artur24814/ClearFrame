@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react'
+import { MAX_TOKEN_LIFE_TIME } from '../conf/tokenConf.js'
 
 const AuthContext = createContext()
 
@@ -8,14 +9,16 @@ export const AutProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'))
   const [expiretime, setExpiretime] = useState(localStorage.getItem('expiretime'))
 
-  const login = (response, expireTokenTime) => {
+  const login = (response) => {
+    const currentTime = Date.now()
+    const newExpiretime = currentTime + MAX_TOKEN_LIFE_TIME
     setIsAuthenticated(true)
     setUser(response.user)
     setToken(response.token)
-    setExpiretime(expireTokenTime)
+    setExpiretime(newExpiretime)
     localStorage.setItem('token', response.token)
     localStorage.setItem('user', response.user)
-    localStorage.setItem('expiretime', expireTokenTime)
+    localStorage.setItem('expiretime', newExpiretime)
   }
 
   const logout = () => {
