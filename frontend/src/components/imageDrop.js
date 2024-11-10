@@ -2,7 +2,7 @@ import React from "react"
 import { BsUpload } from 'react-icons/bs'
 import { Form } from 'react-bootstrap'
 
-function ImageDrop (handleDrop, handleImageUpload) {
+function ImageDrop ({ handleDrop, handleImageUpload }) {
   return (
     <div
       onDrop={handleDrop}
