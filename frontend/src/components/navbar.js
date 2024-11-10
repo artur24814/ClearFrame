@@ -58,19 +58,16 @@ export default function NavbarComponent (){
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to='/user/image-processing'>Features</Nav.Link>
-            <NavDropdown title="Dropdown" id="collapsible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-            </NavDropdown>
+            <Nav.Link as={Link} to='/bg-removal'>Bg removal</Nav.Link>
           </Nav>
           {isAuthenticated ? (
             <Nav>
-              <Nav.Link as={Link} to="/" className='mt-1'>
-                {user}
-              </Nav.Link>
+              <NavDropdown title={user} id="collapsible-nav-dropdown" className='mt-1'>
+                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to='/user/image-processing'>
+                  Image processing
+                </NavDropdown.Item>
+              </NavDropdown>
               <Nav.Link as={Link} to="/">
                 <Button variant="outline-light" onClick={handleLogout} className="me-2">
                   Logout
