@@ -23,8 +23,9 @@ function BgRemoval () {
 
   const handleImageUpload = (e) => {
     const image = e.target.files[0]
-    setError(ImageValidator(image))
-    if (image && !error) {
+    const imageError = ImageValidator(image)
+    setError(imageError)
+    if (image && !imageError) {
       setSelectedImage(image)
       handleSubmit(image)
     }
@@ -62,7 +63,7 @@ function BgRemoval () {
           {!processedImage ? (
             <div className="text-center">
               {loading && <Spinner animation="border" size="lg" />}
-              {error && <Alert variant="danger">{error}</Alert>}
+              {error && <Alert variant="danger" id="image-error-id">{error}</Alert>}
               {!selectedImage && <ImageDrop handleDrop={handleDrop} handleImageUpload={handleImageUpload} />}
             </div>
           ) : (

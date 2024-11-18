@@ -1,7 +1,6 @@
+import { MAX_SIZE, ACCEPTED_TYPES } from "../conf/imageProcessingConf"
+
 export function ImageValidator(file) {
-  const MAX_SIZE = 5 * 1024 * 1024
-  const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/jpg", "image/webp"]
-  
   if (!file) {
     return "File is required"
   }

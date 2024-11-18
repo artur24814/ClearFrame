@@ -14,7 +14,7 @@ function ImageDrop ({ handleDrop, handleImageUpload }) {
       <h5>Drag & Drop your image here</h5>
       <p>or</p>
       <Form.Group>
-          <Form.Control type="file" onChange={handleImageUpload} />
+          <Form.Control type="file" onChange={handleImageUpload} aria-label="Choose file"/>
       </Form.Group>
     </div>
   )
